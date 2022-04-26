@@ -1,0 +1,95 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+
+//在 buildSrc 项目中写了, 那么这里就可以删除掉了
+//class HenCoderPlugin implements Plugin<Project> {
+//
+//    @Override
+//    void apply(Project target) {
+//        def extension = target.extensions.create('hencoder', HenCoderExtension)
+//        target.afterEvaluate {
+//            println "Hello ${extension.name}!"
+//        }
+//    }
+//}
+//
+//class HenCoderExtension {
+//    def name = "rengwuxian123"
+//}
+
+//调用这行代码会执行 HenCoderPlugin 类的 apply() 方法
+apply plugin: 'com.hencoder'
+
+//这里对应 HenCoderPlugin.groovy 里的
+//target.extensions.create('hencoder', HenCoderExtension) 的 hencoder 字符串, 是一个插件扩展名
+hencoder {
+    name 'zhukai!!!'
+}
+
+//def extension = new HenCoderExtension()
+//extension.name = 'zhukai'
+//println "Hellooo ${extension.name}!"
+
+android {
+    compileSdkVersion 31
+
+    defaultConfig {
+        applicationId "com.zyz.testgradle"
+        minSdk 23
+        targetSdk 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        internal {
+            initWith debug
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions 'paying', 'nation'
+    productFlavors {
+        free {
+            dimension 'paying'
+        }
+        paid {
+            dimension 'paying'
+        }
+        //添加 国内版 和 国际版
+        china {
+            dimension 'nation'
+        }
+        global {
+            dimension 'nation'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    implementation project(":library1")
+}
